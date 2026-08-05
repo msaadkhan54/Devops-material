@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommendationservice
+  labels:
+    app: recommendationservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recommendationservice
+  template:
+    metadata:
+      labels:
+        app: recommendationservice
+    spec:
+      containers:
+      - name: recommendationservice
+        image: muhammadsaadkhan5/google-web:recommendation
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "600m"
+            memory: "512Mi"
+        env:
+        - name: PORT
+          value: "8080"
+        - name: PRODUCT_CATALOG_SERVICE_ADDR
+          value: "productcatalogservice:3550"
+        # Disable Google Cloud Profiler
+        - name: DISABLE_PROFILER
+          value: "1"
+        # Disable OpenTelemetry tracing
+        - name: ENABLE_TRACING
+          value: "0"
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 15
+

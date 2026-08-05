@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productcatalogservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productcatalogservice
+  template:
+    metadata:
+      labels:
+        app: productcatalogservice
+    spec:
+      containers:
+      - name: productcatalog
+        image: muhammadsaadkhan5/google-web:prod
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3550
+        resources:
+          requests:
+            cpu: "150m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        env:
+        - name: PORT
+          value: "3550"
+        readinessProbe:
+          tcpSocket:
+            port: 3550
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 3550
+          initialDelaySeconds: 10
+          periodSeconds: 20

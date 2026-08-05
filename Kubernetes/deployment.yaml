@@ -15,15 +15,10 @@ spec:
         app: saad-deploy
     spec:
       containers:
-<<<<<<< HEAD
       - name: ict-project-7
         image: muhammadsaadkhan5/ict_project:8
         ports:
         - containerPort: 80
-=======
-      - image: muhammadsaadkhan5/ict_project:7
-        name: ict-project-7
->>>>>>> ca7824442bfdccf7619e8daa6f2c3110d048864b
 
         env:
         - name: APP_NAME
@@ -54,7 +49,6 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 5
 
-<<<<<<< HEAD
         volumeMounts:
         - name: temp-storage
           mountPath: /data
@@ -63,24 +57,3 @@ spec:
       - name: temp-storage
         persistentVolumeClaim:
           claimName: saad-pvc
-=======
-          - name: DB_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: saad-secret
-                key: DB_USERNAME
-
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 5
-
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 5
->>>>>>> ca7824442bfdccf7619e8daa6f2c3110d048864b

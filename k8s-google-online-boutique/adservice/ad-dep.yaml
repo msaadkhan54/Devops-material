@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adservice
+  template:
+    metadata:
+      labels:
+        app: adservice
+    spec:
+      containers:
+      - name: adservice
+        image: muhammadsaadkhan5/google-web:add
+        imagePullPolicy: Always
+
+        env:
+        - name: PORT
+          value: "9555"
+
+        - name: DISABLE_PROFILER
+          value: "1"
+
+        - name: ENABLE_TRACING
+          value: "0"
+
+        ports:
+        - containerPort: 9555
