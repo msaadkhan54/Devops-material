@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prebinding-demo
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: prebinding
+
+  template:
+    metadata:
+      labels:
+        app: prebinding
+
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+
+        volumeMounts:
+        - name: storage
+          mountPath: /data/special/
+
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: special-pvc

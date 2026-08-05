@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: saad-deploy-fast
+  name: saad-deploy-1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: saad-deploy-fast
+  template:
+    metadata:
+      labels:
+        app: saad-deploy-fast
+    spec:
+      containers:
+      - name: ict-project-7
+        image: muhammadsaadkhan5/ict_project:8
+        ports:
+        - containerPort: 80
+
+        env:
+        - name: APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_NAME
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: saad-secret
+              key: DB_USERNAME
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+        volumeMounts:
+        - name: temp-storage
+          mountPath: /fast
+
+      volumes:
+      - name: temp-storage
+        persistentVolumeClaim:
+          claimName: pvc-fast
